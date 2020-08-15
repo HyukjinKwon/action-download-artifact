@@ -93,8 +93,8 @@ async function main() {
             artfs = artifacts.data.artifacts
             // If we download all, it puts under each artifact name.
             artfs.forEach(function (artifact) {
-              dirpath = pathname.join(path, artifact.name)
-              fs.mkdirSync(dirpath, { recursive: true })
+                dirpath = pathname.join(path, artifact.name)
+                fs.mkdirSync(dirpath, { recursive: true })
             })
         }
 
@@ -117,14 +117,19 @@ async function main() {
                 const action = entry.isDirectory ? "creating" : "inflating"
                 let filepath;
                 if (name) {
-                  filepath = pathname.join(path, entry.entryName)
+                    filepath = pathname.join(path, entry.entryName)
                 }
                 else {
-                  filepath = pathname.join(path, artifact.name, entry.entryName)
+                    filepath = pathname.join(path, artifact.name, entry.entryName)
                 }
                 console.log(`  ${action}: ${filepath}`)
             })
-            adm.extractAllTo(path, true)
+            if (name) {
+                adm.extractAllTo(path, true)
+            }
+            else {
+                adm.extractAllTo(pathname.join(path, artifact.name), true)
+            }
         }
     } catch (error) {
         core.setFailed(error.message)
